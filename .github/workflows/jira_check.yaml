@@ -23,7 +23,7 @@ jobs:
           ISSUE=${COMMIT_MESSAGE%\]*}
           ISSUE_STATUS=$(curl -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Content-Type:application/json" "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}" | jq '.fields.status.name')
               
-          if [ $ISSUE_STATUS == 'To Do' ] || [ $ISSUE_STATUS == 'In Progress' ]
+          if [[ $ISSUE_STATUS == "To Do" ]] || [[ $ISSUE_STATUS == "In Progress" ]]
           then
             curl -X POST -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Accept:application/json" -H "Content-Type:application/json" -d '{"body":"New GitHub work has been linked to this issue: https://github.com/BrytBoyCorp/github-actions/commit/${GITHUB_SHA}"}' "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}/comment"
           else
