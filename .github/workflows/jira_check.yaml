@@ -31,7 +31,7 @@ jobs:
           if [[ $ISSUE_STATUS == '"To Do"' ]] || [[ $ISSUE_STATUS == '"In Progress"' ]]
           then
             EVENT_MESSAGE="New GitHub work has been linked to this issue: https://github.com/BrytBoyCorp/github-actions/commit/${GITHUB_SHA}"
-            curl -X POST -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Accept:application/json" -H "Content-Type:application/json" -d '{"body": $EVENT_MESSAGE}' "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}/comment"
+            curl -X POST -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Accept:application/json" -H "Content-Type:application/json" -d '{"body": "${EVENT_MESSAGE}"}' "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}/comment"
           else
             echo "JIRA issue does not appear to be in an active sprint. Instead the issue status is: ${ISSUE_STATUS} -- Exiting..."
           fi
