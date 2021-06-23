@@ -18,7 +18,7 @@ jobs:
     steps:
       - id: issue-validation
         run: |
-          COMMIT_MESSAGE=${{ github.event.head_commit.message }}
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
           COMMIT_MESSAGE=${COMMIT_MESSAGE#*\[}
           ISSUE=${COMMIT_MESSAGE%\]*}
           ISSUE_STATUS=$(curl -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Content-Type:application/json" "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}" | jq '.fields.status.name')
