@@ -1,0 +1,41 @@
+name: pr_check
+on: 
+  pull_request:
+    branches:
+      - jira-checker
+      
+env:
+  atlassian_user: ${{ secrets.ATLASSIAN_USER }}
+  atlassian_key: ${{ secrets.ATLASSIAN_KEY }}
+  atlassian_url: team-1624462930934.atlassian.net # ${{ secrets.ATLASSIAN_URL }}
+  api_user: ${{ secrets.API_USER }}
+  repo_pat: ${{ secrets.REPO_PAT }}
+      
+jobs:
+  issue-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - id: pr-issues-validation
+        run: |
+          PULL_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          COMMITS=$(curl -u ${{ env.api_user }}:${{ env.repo_pat }} -H "Accept: application/vnd.github.v3+json" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/commits")
+          echo $COMMITS | jq -c '.[]' | while read commit; do
+            COMMIT_SHA=$(echo $commit | jq '.sha')
+            COMMIT_MESSAGE=$(echo $commit | jq '.commit.message')
+            COMMIT_MESSAGE=${COMMIT_MESSAGE#*\[}
+            ISSUE=${COMMIT_MESSAGE%\]*}
+            if [ $ISSUE == "" ]
+            then
+              echo "Pull request contains invalid commit: ${COMMIT_SHA}. This commit lacks a valid JIRA issue key in its description, in the expected format: [JIRA-KEY] -- failing operation."
+              exit 1
+            fi
+            ISSUE_STATUS=$(curl -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Content-Type:application/json" "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}" | jq '.fields.status.name')
+            if [[ $ISSUE_STATUS == '"In Progress"' ]] || [[ $ISSUE_STATUS == '"Done"' ]]
+            then
+              EVENT_MESSAGE="{\"body\":\"A GitHub pull request has been linked to this issue: https://github.com/${GITHUB_REPOSITORY}/pull/${PULL_NUMBER}\"}"
+              curl -X POST -u "${{ env.atlassian_user }}:${{ env.atlassian_key }}" -H "Accept:application/json" -H "Content-Type:application/json" -d "${EVENT_MESSAGE}" "https://${{ env.atlassian_url }}/rest/api/2/issue/${ISSUE}/comment"
+            else
+              echo "JIRA issue does not appear to be active in a sprint. Instead the issue status is: ${ISSUE_STATUS} -- Failing operation."
+              exit 1
+            fi
+          done
