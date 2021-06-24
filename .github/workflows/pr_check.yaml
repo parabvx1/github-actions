@@ -1,8 +1,5 @@
 name: pr_check
-on: 
-  pull_request:
-    branches:
-      - jira-checker
+on: pull_request
       
 env:
   atlassian_user: ${{ secrets.ATLASSIAN_USER }}
@@ -23,6 +20,10 @@ jobs:
             COMMIT_SHA=$(echo $commit | jq '.sha')
             COMMIT_MESSAGE=$(echo $commit | jq '.commit.message')
             echo "Validating new commit: ${COMMIT_SHA} - ${COMMIT_MESSAGE}"
+            if [[ "$COMMIT_MESSAGE" != *"["*"]"* ]]; then
+              echo "Pull request contains invalid commit: ${COMMIT_SHA}. This commit lacks a valid JIRA issue key in its description, in the expected format: [JIRA-KEY] -- failing operation."
+              exit 1
+            fi
             COMMIT_MESSAGE=${COMMIT_MESSAGE#*\[}
             ISSUE=${COMMIT_MESSAGE%\]*}
             if [ $ISSUE == "" ]
