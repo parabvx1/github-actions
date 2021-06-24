@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - jira-checker
-  pull_request:
-    branches:
-      - jira-checker
       
 env:
   atlassian_user: brytboy@github.com
