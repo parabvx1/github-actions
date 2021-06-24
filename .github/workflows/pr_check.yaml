@@ -12,7 +12,7 @@ env:
   repo_pat: ${{ secrets.REPO_PAT }}
       
 jobs:
-  issue-validation:
+  pr-issues-validation:
     runs-on: ubuntu-latest
     steps:
       - id: pr-issues-validation
@@ -22,6 +22,7 @@ jobs:
           echo $COMMITS | jq -c '.[]' | while read commit; do
             COMMIT_SHA=$(echo $commit | jq '.sha')
             COMMIT_MESSAGE=$(echo $commit | jq '.commit.message')
+            echo "Validating new commit: ${COMMIT_SHA} - ${COMMIT_MESSAGE}"
             COMMIT_MESSAGE=${COMMIT_MESSAGE#*\[}
             ISSUE=${COMMIT_MESSAGE%\]*}
             if [ $ISSUE == "" ]
