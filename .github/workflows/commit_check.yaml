@@ -1,4 +1,4 @@
-name: jira_check
+name: commit_check
 on: 
   push:
     branches:
