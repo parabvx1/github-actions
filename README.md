@@ -14,3 +14,4 @@ The Actions in this repository include:
 - # pr_check.yaml:
   - This action monitors the repository for pull requests and validates that all commits included in the pull request include an active Jira issue in their descriptions.
   -  If all commits are determined to be valid, this Action uses the Atlassian REST API to add a comment onto the Jira ticket, specifying that the pull request has been tied to the ticket as completed work and including a link back to it.
+  -  GitHub Secrets is used to store the Atlassian API user, Atlassian API token, (optionally) the Atlassian instance URL, the GitHub API user, and the GitHub API personal access token
