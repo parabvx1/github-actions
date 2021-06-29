@@ -1,4 +1,4 @@
-# Commit/Pull Request Jira Issue Validation
+# Commit/Pull Request Jira Issue Validation test
 This Action acts as an integration between GitHub and Atlassian's Jira by ensuring that commits and pull requests in the GitHub repository are linked to valid work items in Jira.
 
 Use Case:
