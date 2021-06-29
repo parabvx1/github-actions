@@ -5,8 +5,9 @@ env:
   atlassian_user: ${{ secrets.ATLASSIAN_USER }}
   atlassian_key: ${{ secrets.ATLASSIAN_KEY }}
   atlassian_url: team-1624462930934.atlassian.net # ${{ secrets.ATLASSIAN_URL }}
-  api_user: ${{ secrets.API_USER }}
-  repo_pat: ${{ secrets.REPO_PAT }}
+#   api_user: ${{ secrets.API_USER }}
+#   repo_pat: ${{ secrets.REPO_PAT }}
+#   COMMITS=$(curl -u ${{ env.api_user }}:${{ env.repo_pat }} -H "Accept: application/vnd.github.v3+json" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/commits")
       
 jobs:
   pr-issues-validation:
@@ -15,7 +16,7 @@ jobs:
       - id: pr-issues-validation
         run: |
           PULL_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          COMMITS=$(curl -u ${{ env.api_user }}:${{ env.repo_pat }} -H "Accept: application/vnd.github.v3+json" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/commits")
+          COMMITS=$(curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -H "Accept: application/vnd.github.v3+json" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/commits")
           echo $COMMITS | jq -c '.[]' | while read commit; do
             COMMIT_SHA=$(echo $commit | jq '.sha')
             COMMIT_MESSAGE=$(echo $commit | jq '.commit.message')
