@@ -27,8 +27,8 @@ jobs:
             WF_NAME=$(echo $run | jq '.name')
             WF_EVENT=$(echo $run | jq '.event')
             if [[ $WF_NAME == "\"${{ env.workflow_name }}\"" ]] && [[ $WF_EVENT == "\"workflow_dispatch\"" ]]; then
-              echo "looking at new workflow: $WF_NAME"
               RUN_STATUS=$(echo $run | jq '.status')
+              echo "looking at new workflow $WF_NAME with status $RUN_STATUS"
               if [[ $RUN_STATUS == "\"queued\"" ]] || [[ $RUN_STATUS == "\"waiting\"" ]] || [[ $RUN_STATUS == "\"in_progress\"" ]] ; then
                 run_id=$(echo $run | jq '.id')
                 echo "found active workflow: $run_id"
