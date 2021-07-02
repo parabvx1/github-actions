@@ -23,8 +23,8 @@ jobs:
           -d '{ \
                 "ref": "nested-workflows", \
                 "inputs": { \
-                  "input1":"foo", \
-                  "input2":"bar" \
+                  "foo":"Foo", \
+                  "bar":"Bar" \
                 } \
               }' \
           )
