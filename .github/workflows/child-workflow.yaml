@@ -20,5 +20,5 @@ jobs:
     steps:
       - id: child-step
         run: |
-          echo "::debug::Input foo was: ${{ github.event.inputs.foo }}"
-          echo "::debug::Input bar was: ${{ github.event.inputs.bar }}"
+          echo "Input foo was: ${{ github.event.inputs.foo }}"
+          echo "Input bar was: ${{ github.event.inputs.bar }}"
