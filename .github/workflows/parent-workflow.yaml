@@ -13,7 +13,7 @@ jobs:
       - id: trigger-child-workflow
         run: |     
           gh auth login --with-token < <(echo ${{ secrets.GITHUB_TOKEN }})
-          CHILD_API_RESP=$(gh workflow run child-workflow.yaml -f foo=Foo -f bar=Bar)
+          CHILD_API_RESP=$(gh workflow run -R $GITHUB_REPOSITORY child-workflow.yaml -f foo=Foo -f bar=Bar)
           echo " Response from child workflow: $CHILD_API_RESP"
         
 #        CHILD_RESPONSE=$(curl -X POST \
