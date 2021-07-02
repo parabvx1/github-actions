@@ -1,12 +1,12 @@
 name: parent_workflow
 on:
-  commit:
+  push:
     branches:
       - nested-workflows
 
 jobs:
   parent_job:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - id: sample-step-1
         run: echo "This is the first step, before child workflow execution."
