@@ -20,7 +20,7 @@ jobs:
           -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           -H "Accept: application/vnd.github.v3+json" \
           "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/workflows/child-workflow.yaml/dispatches" \
-          -d '{"ref":"nested-workflows","inputs": {"foo":"Foo","bar":"Bar"}}' \
+          -d '{"ref":"nested-workflows","inputs":{"foo":"Foo","bar":"Bar"}}' \
           )
           echo " Response from child workflow: $CHILD_RESPONSE"
       - id: sample-step-2
