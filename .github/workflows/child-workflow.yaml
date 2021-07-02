@@ -1,0 +1,21 @@
+name: child_workflow
+on:
+  workflow_dispatch:
+    inputs:
+      foo:
+        description: 'Sample required input'
+        required: true
+        default: 'Mona the Octocat'
+      bar:
+        description: 'Sample optional input'
+        required: false
+        default: 'The Octoverse'
+        
+jobs:
+  child_job:
+    runs_on: ubuntu-latest
+    steps:
+      - id: child-step
+        run: |
+          echo "Input foo was: ${{ github.event.inputs.foo }}"
+          echo "Input bar was: ${{ github.event.inputs.bar }}"
