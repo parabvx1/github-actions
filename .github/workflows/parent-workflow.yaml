@@ -16,12 +16,13 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/workflows" \
           
+          CHILD_API_RESP=$(gh workflow run child-workflow.yaml -f foo=Foo -f bar=Bar)
           CHILD_RESPONSE=$(curl -X POST \
           -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           -H "Accept: application/vnd.github.v3+json" \
           "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/workflows/child-workflow.yaml/dispatches" \
           -d '{"ref":"nested-workflows","inputs":{"foo":"Foo","bar":"Bar"}}' \
           )
-          echo " Response from child workflow: $CHILD_RESPONSE"
+          echo " Response from child workflow: $CHILD_API_RESPONSE"
       - id: sample-step-2
         run: echo "This is the second step, after child workflow execution."
