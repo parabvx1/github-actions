@@ -12,6 +12,10 @@ jobs:
         run: echo "This is the first step, before child workflow execution."
       - id: trigger-child-workflow
         run: | 
+          curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          -H "Accept: application/vnd.github.v3+json" \
+          "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/workflows" \
+          
           CHILD_RESPONSE=$(curl -X POST \
           -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
           -H "Accept: application/vnd.github.v3+json" \
