@@ -16,7 +16,7 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/workflows" \
           
-          gh auth login < echo "${{ secrets.GITHUB_TOKEN }}"
+          gh auth login --with-token < echo "${{ secrets.GITHUB_TOKEN }}"
           CHILD_API_RESP=$(gh workflow run child-workflow.yaml -f foo=Foo -f bar=Bar)
           CHILD_RESPONSE=$(curl -X POST \
           -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
