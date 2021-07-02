@@ -1,8 +1,5 @@
 name: child_workflow
 on:
-  pull_request: 
-    branches:
-      - nested-workflows
   workflow_dispatch:
     inputs:
       foo:
